@@ -114,6 +114,8 @@ sub parse_commandline {
 #    }
 sub meta {
 
+    print "in meta\n";
+
     my $_keywords = shift; # SkIp
     my $_path     = shift;
 
@@ -130,7 +132,18 @@ sub meta {
 
     $meta->{BRANCH} = $branch;
 
+    print " format ";
+    print $format;
+    print "\n branch ";
+    print $branch;
+    print "\n _path ";
+    print $_path;
+    print "\n";
+
     my $log = `git log -g -n 1 --pretty="$format" "$branch" -- "$_path" 2>/dev/null`;
+    print "if ( not $log) = ";
+    print (not $log);
+    print "\n";
     return if ( not $log );
 
     foreach my $entry ( split( /\n/, $log ) ) {
@@ -148,6 +161,9 @@ sub meta {
 
     $meta->{FILE} = basename( $_path );
 
+    print "returning $meta as ";
+    print $meta;
+    print "\n";
     return $meta;
 }
 
@@ -207,15 +223,30 @@ sub subst {
 # <- the smudged string
 sub smudge {
 
+    print "\nsmudge()\n";
+
     my $_keywords = shift; # SkIp
     my $_path     = shift;
     my $_curr     = shift;
 
     my $meta = meta( $_keywords, $_path ); # SkIp
+    print "meta = ";
+    print $meta;
+    print "\n";
 
     my @curr = split( /\n/, "$_curr", -1 );
 
+    print"\ncurr\n";
+    print @curr;
+    print "\nend curr\n";
+
     for ( my $idx = 0; $idx < scalar( @curr ); $idx++ ) {
+
+        print "b4 ";
+        print $idx;
+        print "   ";
+        print $curr[$idx];
+        print "\n";
 
         next if ( $curr[$idx] =~ /SkIp/ );
 
@@ -223,9 +254,16 @@ sub smudge {
 
             $curr[$idx] = history( $_path, $2, $3, $4, $1 );
         } else {
-
+            print "going to subst ";
+            print "\n";
             $curr[$idx] = subst( $meta, $curr[$idx] );
         }
+
+        print "af ";
+        print $idx;
+        print "   ";
+        print $curr[$idx];
+        print "\n"; 
     }
 
     return join ( "\n", @curr );

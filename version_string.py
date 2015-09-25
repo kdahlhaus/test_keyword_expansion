@@ -1,3 +1,5 @@
 commit_hash="<COMMITHASH>"
-commit_hash_abbrev="<COMMITHASHABBREVIATED>"
-commiter_date="<COMMITTERDATE>"
+commit_hash="%H"
+commit_hash=" %H "
+commit_hash_abbrev="%h"
+commiter_date="%cd"
